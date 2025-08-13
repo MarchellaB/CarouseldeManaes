@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Weekly Meals - MaNae's Cuisine</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #1a1a1a;
+        }
+
+        /* Header and Navigation */
+        header {
+            background: black;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        nav img {
+            height: 50px;
+            width: auto;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            color: #e74c3c;
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        nav button {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Main content area */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem 0;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Three-panel layout container */
+        .three-panel-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 600px;
+            gap: 0;
+        }
+
+        /* Left panel - Order Your Weekly Meals */
+        .left-panel {
+            flex: 1;
+            background: #B91C3C;
+            color: white;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .left-panel h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .left-panel p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Center panel - Meal Carousel */
+        .center-panel {
+            flex: 2;
+            background: white;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .meal-carousel-container {
+            padding: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .meal-carousel {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .meal-slide {
+            min-width: 100%;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .meal-slide img {
+            max-width: 100%;
+            height: 300px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .meal-slide h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            min-height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .meal-slide p {
+            font-size: 1.3rem;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .quantity-control {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quantity-control button {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            min-width: 40px;
+        }
+
+        .quantity-control button:hover {
+            background-color: #e67e22;
+        }
+
+        .quantity-control input {
+            width: 60px;
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.2rem;
+        }
+
+        .add-to-cart-button {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .add-to-cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        .carousel-nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            padding: 1rem;
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 10;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .carousel-nav-button.left {
+            left: 10px;
+        }
+
+        .carousel-nav-button.right {
+            right: 10px;
+        }
+
+        .carousel-nav-button:hover {
+            background-color: rgba(0,0,0,0.7);
+        }
+
+        /* Right panel - Your Order Summary */
+        .right-panel {
+            flex: 1;
+            background: #B91C3C;
+            color: white;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-panel h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .cart-items-container {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed rgba(255,255,255,0.3);
+            font-size: 0.9rem;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding-top: 1rem;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .checkout-button {
+            background: #F97316;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+            width: 100%;
+        }
+
+        .checkout-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.5);
+        }
+
+        /* Mobile responsive design */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .main-content {
+                margin-top: 120px;
+                padding: 1rem 0;
+            }
+
+            .three-panel-container {
+                flex-direction: column;
+                max-width: 100%;
+                margin: 0;
+                gap: 0;
+            }
+
+            .left-panel,
+            .right-panel {
+                flex: none;
+                padding: 2rem 1rem;
+                text-align: center;
+            }
+
+            .left-panel h1 {
+                font-size: 2rem;
+            }
+
+            .left-panel p {
+                font-size: 1rem;
+            }
+
+            .center-panel {
+                flex: none;
+                min-height: 500px;
+            }
+
+            .meal-carousel-container {
+                padding: 1rem;
+            }
+
+            .meal-slide img {
+                height: 250px;
+            }
+
+            .meal-slide h2 {
+                font-size: 1.2rem;
+                min-height: 2.5rem;
+            }
+
+            .right-panel h2 {
+                font-size: 1.5rem;
+            }
+
+            .carousel-nav-button {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .quantity-control {
+                gap: 0.5rem;
+            }
+
+            .quantity-control button {
+                padding: 0.4rem 0.8rem;
+                font-size: 1rem;
+            }
+
+            .quantity-control input {
+                width: 50px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Extra small mobile devices */
+        @media (max-width: 480px) {
+            .main-content {
+                margin-top: 140px;
+            }
+
+            .left-panel,
+            .right-panel {
+                padding: 1.5rem 0.5rem;
+            }
+
+            .left-panel h1 {
+                font-size: 1.8rem;
+            }
+
+            .right-panel h2 {
+                font-size: 1.3rem;
+            }
+
+            .meal-slide h2 {
+                font-size: 1.1rem;
+            }
+
+            .meal-slide img {
+                height: 200px;
+            }
+
+            .cart-item {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="manaes_cuisine_logo.png" alt="MaNae's Cuisine Logo">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Our Services</a></li>
+                <li><a href="#">Menus</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Order Weekly Meals</a></li>
+            </ul>
+            <button>Book Your Event</button>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="three-panel-container">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <h1>Order Your Weekly Meals</h1>
+                <p>Select your delicious, healthy meals for the week ahead!</p>
+                <p>Browse through our carefully crafted menu options and add your favorites to your cart.</p>
+                <p>Each meal is prepared with fresh, quality ingredients to nourish your body and delight your taste buds.</p>
+            </div>
+
+            <!-- Center Panel - Meal Carousel -->
+            <div class="center-panel">
+                <div class="meal-carousel-container">
+                    <div class="meal-carousel" id="mealCarousel">
+                        <!-- Meal slides will be dynamically loaded here -->
+                    </div>
+                    <button class="carousel-nav-button left" id="prevMeal">&#10094;</button>
+                    <button class="carousel-nav-button right" id="nextMeal">&#10095;</button>
+                </div>
+            </div>
+
+            <!-- Right Panel - Order Summary -->
+            <div class="right-panel">
+                <h2>Your Order Summary</h2>
+                <div class="cart-items-container" id="cartItems">
+                    <!-- Cart items will be populated here -->
+                </div>
+                <div class="cart-total">
+                    Total: <span id="cartTotal">$0.00</span>
+                </div>
+                <button class="checkout-button" id="checkoutButton">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const meals = [
+            { id: 1, name: "Grilled Herb Chicken with Seasonal Veggies", price: 15.99, image: "meal_1.jpg" },
+            { id: 2, name: "Blackened Salmon and Shrimp with Sautéed Green Beans and Alfredo Sauce", price: 20.99, image: "meal_2.jpg" },
+            { id: 3, name: "Shrimp with Sautéed Broccoli and Asparagus", price: 18.99, image: "meal_3.jpg" },
+            { id: 4, name: "Southwest Chicken Taco Bowl", price: 12.99, image: "meal_4.jpg" },
+            { id: 5, name: "Blackened Shrimp Vegetable Medley and Asparagus", price: 17.99, image: "meal_5.jpg" },
+            { id: 6, name: "Chicken Grilled Chicken Sausage Bell Peppers and Onion Asparagus and Twice-Baked Mashed Potatoes", price: 17.99, image: "meal_6.jpg" },
+            { id: 7, name: "Catfish over Seasoned Rice with Bell Peppers and Onions", price: 20.99, image: "meal_7.jpg" },
+            { id: 8, name: "Manae's Chicken & Shrimp Fried Rice", price: 15.99, image: "meal_8.jpg" },
+            { id: 9, name: "Pesto Chicken Bake", price: 15.99, image: "meal_9.jpg" },
+            { id: 10, name: "Cajun Chicken and Sausage Pasta", price: 18.99, image: "meal_10.jpg" },
+            { id: 11, name: "Italian Chicken Salad", price: 16.99, image: "meal_11.jpg" },
+            { id: 12, name: "Manae's Homemade Chicken Salad", price: 12.99, image: "meal_12.jpg" },
+            { id: 13, name: "Manae's Salmon and Shrimp House Salad", price: 18.99, image: "meal_13.jpg" },
+            { id: 14, name: "Chicken Taco Salad", price: 15.99, image: "meal_14.jpg" },
+            { id: 15, name: "Manae's High Protein Chicken Salad", price: 15.99, image: "meal_15.jpg" },
+            { id: 16, name: "Manae's Garlic Butter Shrimp and Rice Bowl with Bell Peppers and Onions", price: 16.99, image: "meal_16.jpg" },
+            { id: 17, name: "Manae's Seasonal Fruit Bowl Small", price: 10.00, image: "meal_17.jpg" },
+            { id: 18, name: "Large Fruit Bowl", price: 15.99, image: "meal_18.jpg" },
+            { id: 19, name: "Blackened Salmon and Shrimp Sautéed Baked Mashed Potatoes", price: 20.99, image: "meal_19.jpg" },
+            { id: 20, name: "Manae's Grilled Chicken Skewer with Sautéed Broccoli", price: 13.99, image: "meal_20.jpg" },
+            { id: 21, name: "Manae's Stuffed Bell Pepper", price: 11.25, image: "meal_21.jpg" },
+            { id: 22, name: "Manae's Vegan Stuffed Bell Pepper", price: 15.99, image: "meal_22.jpg" },
+            { id: 23, name: "Hamburger Salad", price: 12.75, image: "meal_23.jpg" },
+            { id: 24, name: "Manae's Salmon Loaded Salad", price: 18.99, image: "meal_24.jpg" }
+        ];
+
+        let currentMealIndex = 0;
+        let cart = JSON.parse(localStorage.getItem('manaes_cart')) || {};
+
+        const mealCarousel = document.getElementById('mealCarousel');
+        const prevMealBtn = document.getElementById('prevMeal');
+        const nextMealBtn = document.getElementById('nextMeal');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartTotalSpan = document.getElementById('cartTotal');
+        const checkoutButton = document.getElementById('checkoutButton');
+
+        function renderMeals() {
+            mealCarousel.innerHTML = '';
+            meals.forEach((meal, index) => {
+                const mealSlide = document.createElement('div');
+                mealSlide.classList.add('meal-slide');
+                mealSlide.innerHTML = `
+                    <img src="${meal.image}" alt="${meal.name}">
+                    <h2>${meal.name}</h2>
+                    <p>$${meal.price.toFixed(2)}</p>
+                    <div class="quantity-control">
+                        <button data-id="${meal.id}" data-action="decrement">-</button>
+                        <input type="number" value="${cart[meal.id] ? cart[meal.id].quantity : 0}" min="0" data-id="${meal.id}" class="quantity-input">
+                        <button data-id="${meal.id}" data-action="increment">+</button>
+                    </div>
+                    <button class="add-to-cart-button" data-id="${meal.id}">Add to Cart</button>
+                `;
+                mealCarousel.appendChild(mealSlide);
+            });
+            updateCarouselPosition();
+            renderCart();
+        }
+
+        function updateCarouselPosition() {
+            const offset = -currentMealIndex * 100;
+            mealCarousel.style.transform = `translateX(${offset}%)`;
+        }
+
+        function renderCart() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            for (const mealId in cart) {
+                const item = cart[mealId];
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                const cartItemDiv = document.createElement('div');
+                cartItemDiv.classList.add('cart-item');
+                cartItemDiv.innerHTML = `
+                    <span>${item.name} x ${item.quantity}</span>
+                    <span>$${itemTotal.toFixed(2)}</span>
+                `;
+                cartItemsContainer.appendChild(cartItemDiv);
+            }
+            cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+            localStorage.setItem('manaes_cart', JSON.stringify(cart));
+        }
+
+        mealCarousel.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-to-cart-button')) {
+                const mealId = parseInt(e.target.dataset.id);
+                const quantityInput = e.target.previousElementSibling.querySelector('.quantity-input');
+                const quantity = parseInt(quantityInput.value);
+                const meal = meals.find(m => m.id === mealId);
+
+                if (quantity > 0) {
+                    cart[mealId] = { ...meal, quantity: (cart[mealId] ? cart[mealId].quantity : 0) + quantity };
+                } else if (cart[mealId]) {
+                    delete cart[mealId];
+                }
+                renderCart();
+                quantityInput.value = 0; // Reset quantity input after adding to cart
+            }
+
+            if (e.target.dataset.action) {
+                const mealId = parseInt(e.target.dataset.id);
+                const action = e.target.dataset.action;
+                const quantityInput = e.target.parentNode.querySelector('.quantity-input');
+                let currentQuantity = parseInt(quantityInput.value);
+
+                if (action === 'increment') {
+                    currentQuantity++;
+                } else if (action === 'decrement' && currentQuantity > 0) {
+                    currentQuantity--;
+                }
+                quantityInput.value = currentQuantity;
+            }
+        });
+
+        mealCarousel.addEventListener('change', (e) => {
+            if (e.target.classList.contains('quantity-input')) {
+                const mealId = parseInt(e.target.dataset.id);
+                const quantity = parseInt(e.target.value);
+                const meal = meals.find(m => m.id === mealId);
+
+                if (quantity > 0) {
+                    cart[mealId] = { ...meal, quantity: quantity };
+                } else if (cart[mealId]) {
+                    delete cart[mealId];
+                }
+                renderCart();
+            }
+        });
+
+        prevMealBtn.addEventListener('click', () => {
+            currentMealIndex = (currentMealIndex > 0) ? currentMealIndex - 1 : meals.length - 1;
+            updateCarouselPosition();
+        });
+
+        nextMealBtn.addEventListener('click', () => {
+            currentMealIndex = (currentMealIndex < meals.length - 1) ? currentMealIndex + 1 : 0;
+            updateCarouselPosition();
+        });
+
+        checkoutButton.addEventListener('click', () => {
+            if (Object.keys(cart).length === 0) {
+                alert('Your cart is empty. Please add some meals before checking out.');
+                return;
+            }
+            const orderData = { items: Object.values(cart) };
+            localStorage.setItem('manaes_order', JSON.stringify(orderData));
+            window.location.href = 'checkout_soloist.html';
+        });
+
+        // Update navigation links to point to Soloist.ai's internal pages or sections
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            if (link.textContent === 'Home') {
+                link.href = '/';
+            } else if (link.textContent === 'Order Weekly Meals') {
+                link.href = '#';
+            } else {
+                link.href = '#';
+            }
+        });
+
+        document.querySelector('nav button').addEventListener('click', () => {
+            window.location.href = '#';
+        });
+
+        document.addEventListener('DOMContentLoaded', renderMeals);
+    </script>
+</body>
+</html>
+
